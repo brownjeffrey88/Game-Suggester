@@ -1,8 +1,57 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model GSMVC.Models.Request
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    ViewData["Title"] = "Board Game Suggester";
+}
+<br />
+    <h1>Board Game Suggester</h1>
+
+<h4>Play more, deliberate less</h4>
+<hr /><br /><br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="username" class="control-label"></label>
+                <input asp-for="username" class="form-control" />
+                <span asp-validation-for="username" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="remember" /> @Html.DisplayNameFor(model => model.remember)
+                </label>
+            </div>
+            <br /><br />
+            <h4>Optional refinements</h4>
+            <hr />
+            <div class="form-group">
+                <label asp-for="players" class="control-label"></label>
+                <input asp-for="players" class="form-control" />
+                <span asp-validation-for="players" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="playTime" class="control-label"></label>
+                <input asp-for="playTime" class="form-control" />
+                <span asp-validation-for="playTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="weight" class="control-label"></label>
+                <input asp-for="weight" class="form-control" />
+                <span asp-validation-for="weight" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="unplayed" /> @Html.DisplayNameFor(model => model.unplayed)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Give me a game!" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
