@@ -1,5 +1,5 @@
 # Game Suggester
- first asp net core mvc page
+ first asp net core mvc page.
  
 Objective is to create a page that will take a user's board game geek username and optional fields: player count, play time, and game weight. It will present them a game from their board game geek collection to play. site should remember username for future visits.
 
