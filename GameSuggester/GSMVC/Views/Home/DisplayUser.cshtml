@@ -1,0 +1,65 @@
+﻿@model IEnumerable<GSMVC.Models.Request>
+
+@{
+    ViewData["Title"] = "DisplayUser";
+}
+
+<h1>DisplayUser</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.remember)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.players)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.playTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.weight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.unplayed)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.remember)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.players)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.playTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.weight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.unplayed)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

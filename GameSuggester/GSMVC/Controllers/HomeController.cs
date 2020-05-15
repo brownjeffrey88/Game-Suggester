@@ -6,29 +6,177 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using GSMVC.Models;
+using System.Net.Http;
+using System.Xml.Linq;
 
 namespace GSMVC.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        string bggBaseUrl = "https://boardgamegeek.com/xmlapi2/";
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Index(Request request)
+            //fancy animation idea: rotate images of their games on the screen while crunching api with "picking a game" text
+
+                //string url = bggBaseUrl + "collection?username=" + request.username;
+                //make sure username is valid. if result returned
+                //take all parameters from the game request, apply the fields relevant to the collection-API request to the url and execute
+                //all other fields will be added to a search-criteria-type model and held
+                //collection-API xml results will be parsed and stored in a list.
+                //each id in that list will be searched and xml parsed, anything not matching the search-criteria-type model will be removed from the list
+                //once complete a random game will be displayed and then removed from the list. if "pick a different game" is selected the next game will follow the same procedure.
+
+        public async Task<IActionResult> DisplayUserAsync(Request request)
         {
-            return View();
+
+
+
+            //ADD "SHOW ME A LIST" OR "PICK AT RANDOM" BUTTONS
+
+
+
+            List<String> games = new List<string>();
+            //remembers the users name for next visit
+            if (request.remember)
+            {
+                //do cookie stuff
+            }
+
+            //takes the request model and gets the username filled in by the user
+            string collectionURL = bggBaseUrl + "collection?username=" + request.username;
+
+            //sees if the player only wants suggestions for games in their collection they havent played
+            if (request.unplayed)
+            {
+                collectionURL += "&played=0";
+            }
+
+            //takes collection url, sends to get list of game objectid's to parse using get game
+            games = await GetCollection(collectionURL);
+
+
+            //verify user inputs are added to url
+            string thingURL = bggBaseUrl + "thing?id=";
+            List<GameModel> gameOptions = await GetGames(thingURL, games);
+
+            //from here we can pass the game list to a function to remove games from the list that dont match our criteria and return the list
+            //depending on an option the user chose we will either show the whole list or a random game
+
+            //test stuff delete after complete
+            request.username = collectionURL;
+            Console.WriteLine(request.username);
+            List <Request> names = new List<Request>();
+            names.Add(request);
+
+            //should return a game model
+            return View(names);
         }
+
+        //passes in a BGG url and returns single element, used for game xml parsing
+        public async Task<XElement> GetElement(string url)
+        {
+            //make element 
+            
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(url))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    XElement responseToXml = XElement.Parse(apiResponse);
+                    return responseToXml;
+                }
+            }
+
+            
+        }
+
+        //passes in a BGG url and returns a list of parsed items, will use for collection xml parsing
+        public async Task<List<XElement>> GetElementList(string url)
+        {
+            //make element list 
+            List<XElement> gameNodes = new List<XElement>();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(url))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    XElement responseToXml = XElement.Parse(apiResponse);
+                    gameNodes = responseToXml.Elements("item").ToList();
+                }
+            }
+
+            return gameNodes;
+        }
+
+        //takes collection url, gets the elements of the returned xml, parses them and removes game object id's for use with GetGames function
+        public async Task<List<String>> GetCollection(string url)
+        {
+            List<String> gameId = new List<string>();
+            List<XElement> gameNodes = await GetElementList(url);
+            for (int i = 0; i < gameNodes.Count; i++)
+            {
+                XElement game = gameNodes[i];
+                string gameValue = game.Attribute("objectid").Value;
+                gameId.Add(gameValue);
+            }
+            return gameId;
+        }
+
+
+        public async Task<List<GameModel>> GetGames(string url, List<String> gameList)
+        {
+            List<GameModel> choices = new List<GameModel>();
+            foreach (var id in gameList)
+            {
+                //make a new game model, populate it, add it to the game model list
+                GameModel game = new GameModel();
+                XElement gameElement = await GetElement(url + id);
+                if(gameElement.Attribute("type").Value == "boardgameexpansion")
+                {
+                    continue;
+                }
+                else
+                {
+                    game.Image = gameElement.Attribute("image").Value;
+                    game.Description = gameElement.Attribute("description").Value;
+
+                    game.Designer = gameElement.Attribute("boardgamedesigner").Value;
+                    game.Artist = gameElement.Attribute("boardgameartist").Value;
+                    game.Publisher = gameElement.Attribute("boardgamepublisher").Value;
+
+
+                    //use a web scraper to get the below information, easier than trying to parse the elements
+                    //https://boardgamegeek.com/boardgame/ followed by games ID
+
+                    game.MinPlayers = Int32.Parse(gameElement.Attribute("minplayers").Value);
+                    game.MaxPlayers = Int32.Parse(gameElement.Attribute("maxplayers").Value);
+                    game.MinPlayTime = Int32.Parse(gameElement.Attribute("minplaytime").Value);
+                    game.MaxPlayTime = Int32.Parse(gameElement.Attribute("maxplaytime").Value);
+
+                    //need to sort
+                    game.SuggestedPlayers = Int32.Parse(gameElement.Attribute("").Value);
+
+                }
+
+
+            }
+
+            return choices;
+        }
+
+
+
+
 
         public IActionResult Privacy()
         {
