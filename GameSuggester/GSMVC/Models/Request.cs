@@ -22,6 +22,9 @@ namespace GSMVC.Models
         [Display(Name = "weight/complexity")]
         [Range(0.00, 5.00, ErrorMessage = "you need to enter a weight between 0.00 and 5.00")]
         public float? weight { get; set; }
+        [Display(Name = "minimum rating")]
+        [Range(0.00, 10.00, ErrorMessage = "you need to enter a rating between 0 and 10")]
+        public float? rating { get; set; }
         [Display(Name = "new or unplayed games only?")]
         public bool unplayed { get; set; }
 

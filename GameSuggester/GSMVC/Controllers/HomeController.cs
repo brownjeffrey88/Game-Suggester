@@ -13,6 +13,9 @@ namespace GSMVC.Controllers
 {
     public class HomeController : Controller
     {
+
+        //BGG api docs https://boardgamegeek.com/wiki/page/BGG_XML_API2
+
         private readonly ILogger<HomeController> _logger;
         string bggBaseUrl = "https://boardgamegeek.com/xmlapi2/";
 
@@ -40,7 +43,7 @@ namespace GSMVC.Controllers
         {
 
 
-
+            //TODO
             //ADD "SHOW ME A LIST" OR "PICK AT RANDOM" BUTTONS
 
 
@@ -53,13 +56,21 @@ namespace GSMVC.Controllers
             }
 
             //takes the request model and gets the username filled in by the user
-            string collectionURL = bggBaseUrl + "collection?username=" + request.username;
+            string collectionURL = bggBaseUrl + "collection?username=" + request.username + "&stats=1&own=1";
 
             //sees if the player only wants suggestions for games in their collection they havent played
             if (request.unplayed)
             {
                 collectionURL += "&played=0";
             }
+
+
+
+            //TODO
+            //slider min rating and rating or minbggrating bggrating -- if played = 0 use bgg rating
+            //checkboxes -cooperative competitive solo
+
+
 
             //takes collection url, sends to get list of game objectid's to parse using get game
             games = await GetCollection(collectionURL);
@@ -127,6 +138,14 @@ namespace GSMVC.Controllers
             {
                 XElement game = gameNodes[i];
                 string gameValue = game.Attribute("objectid").Value;
+
+
+
+                //if min players max players, rank were wrong then continue, else add to the list
+
+
+
+
                 gameId.Add(gameValue);
             }
             return gameId;
@@ -140,7 +159,7 @@ namespace GSMVC.Controllers
             {
                 //make a new game model, populate it, add it to the game model list
                 GameModel game = new GameModel();
-                XElement gameElement = await GetElement(url + id);
+                XElement gameElement = await GetElement(url + id + "&stats=1");
                 if(gameElement.Attribute("type").Value == "boardgameexpansion")
                 {
                     continue;
@@ -149,22 +168,36 @@ namespace GSMVC.Controllers
                 {
                     game.Image = gameElement.Attribute("image").Value;
                     game.Description = gameElement.Attribute("description").Value;
-
+                    //game.Rating = gameElement.Attribute().Value; //fill out
                     game.Designer = gameElement.Attribute("boardgamedesigner").Value;
                     game.Artist = gameElement.Attribute("boardgameartist").Value;
                     game.Publisher = gameElement.Attribute("boardgamepublisher").Value;
-
-
-                    //use a web scraper to get the below information, easier than trying to parse the elements
-                    //https://boardgamegeek.com/boardgame/ followed by games ID
-
                     game.MinPlayers = Int32.Parse(gameElement.Attribute("minplayers").Value);
+                    game.Solo = (game.MinPlayers == 1) ? true : false;
                     game.MaxPlayers = Int32.Parse(gameElement.Attribute("maxplayers").Value);
                     game.MinPlayTime = Int32.Parse(gameElement.Attribute("minplaytime").Value);
                     game.MaxPlayTime = Int32.Parse(gameElement.Attribute("maxplaytime").Value);
+                    game.BggRank = Int32.Parse(gameElement.Element("rank").Value); //needs testing probably need to drill down ranks => rank.value
+
+
+                    game.Mechanics = gameElement.Elements()
+                .Where(e => e.Name == "item").Elements()
+                .Where(e => e.Name == "link")
+                .Select(e => e.Attribute("type"))
+                .Where(e => e.Value == "boardgamemechanic")
+                .Select(e => e.Parent).Attributes()
+                .Where(e => e.Name == "value")
+                .Select(e => e.Value);
+
+                    //use a web scraper to get the below information, easier than trying to parse the elements
+                    //https://boardgamegeek.com/boardgame/ followed by games ID
+                    //try this web scraper https://dev.to/rachelsoderberg/create-a-simple-web-scraper-in-c-1l1m
+
+                    //suggested players-string need to parse page or loop through object elements to find highest suggested.
 
                     //need to sort
                     game.SuggestedPlayers = Int32.Parse(gameElement.Attribute("").Value);
+                    // found on page, key terms: "polls":{"userplayers":{"best":[{"min":3,"max":3}],"recommended":[{"min":1,"max":4}]
 
                 }
 
