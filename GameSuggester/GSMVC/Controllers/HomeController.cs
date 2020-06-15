@@ -168,7 +168,7 @@ namespace GSMVC.Controllers
                 {
                     game.Image = gameElement.Attribute("image").Value;
                     game.Description = gameElement.Attribute("description").Value;
-                    //game.Rating = gameElement.Attribute().Value; //fill out
+                    game.Rating = float.Parse(gameElement.Element("statistics").Element("ratings").Attribute("average").Value);
                     game.Designer = gameElement.Attribute("boardgamedesigner").Value;
                     game.Artist = gameElement.Attribute("boardgameartist").Value;
                     game.Publisher = gameElement.Attribute("boardgamepublisher").Value;
@@ -177,17 +177,16 @@ namespace GSMVC.Controllers
                     game.MaxPlayers = Int32.Parse(gameElement.Attribute("maxplayers").Value);
                     game.MinPlayTime = Int32.Parse(gameElement.Attribute("minplaytime").Value);
                     game.MaxPlayTime = Int32.Parse(gameElement.Attribute("maxplaytime").Value);
-                    game.BggRank = Int32.Parse(gameElement.Element("rank").Value); //needs testing probably need to drill down ranks => rank.value
-
-
+                    game.BggRank = Int32.Parse(gameElement.Element("statistics").Element("ranks").Attribute("value").Value);
+                    game.weight = float.Parse(gameElement.Element("statistics").Element("ratings").Attribute("averageweight").Value);
                     game.Mechanics = gameElement.Elements()
-                .Where(e => e.Name == "item").Elements()
-                .Where(e => e.Name == "link")
-                .Select(e => e.Attribute("type"))
-                .Where(e => e.Value == "boardgamemechanic")
-                .Select(e => e.Parent).Attributes()
-                .Where(e => e.Name == "value")
-                .Select(e => e.Value);
+                        .Where(e => e.Name == "item").Elements()
+                        .Where(e => e.Name == "link")
+                        .Select(e => e.Attribute("type"))
+                        .Where(e => e.Value == "boardgamemechanic")
+                        .Select(e => e.Parent).Attributes()
+                        .Where(e => e.Name == "value")
+                        .Select(e => e.Value);
 
                     //use a web scraper to get the below information, easier than trying to parse the elements
                     //https://boardgamegeek.com/boardgame/ followed by games ID
