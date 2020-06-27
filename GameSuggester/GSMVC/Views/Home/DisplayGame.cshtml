@@ -1,0 +1,102 @@
+﻿@model GSMVC.Models.GameModel
+
+@{
+    ViewData["Title"] = "DisplayGame";
+}
+
+<h1>I Picked....</h1>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Name)</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Image)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MinPlayers)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MinPlayers)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaxPlayers)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxPlayers)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SuggestedPlayers)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SuggestedPlayers)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MinPlayTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MinPlayTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaxPlayTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxPlayTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.weight)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.weight)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BggRank)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BggRank)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Solo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Solo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Competitive)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Competitive)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cooperative)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cooperative)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

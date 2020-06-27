@@ -1,0 +1,125 @@
+﻿@model IEnumerable<GSMVC.Models.GameModel>
+
+@{
+    ViewData["Title"] = "DisplayGames";
+}
+
+<h1>DisplayGames</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinPlayers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxPlayers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuggestedPlayers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinPlayTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxPlayTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Designers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Artists)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publishers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.weight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BggRank)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Solo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Competitive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cooperative)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Image)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinPlayers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxPlayers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuggestedPlayers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinPlayTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxPlayTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Designers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Artists)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publishers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.weight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BggRank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Solo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Competitive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cooperative)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
